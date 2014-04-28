@@ -9,7 +9,6 @@ module Marantz
 
     def source=(name)
       perform(PATHS[:main_zone], COMMANDS[:source] % (SOURCES[name] or raise UnknownSource))
-      source
     end
 
     def source
@@ -21,7 +20,6 @@ module Marantz
       raise VolumeTooHigh if db > Marantz.config.max_volume
       path = PATHS[:main_zone]
       perform(path, COMMANDS[:volume] % db_to_volume(db))
-      volume
     end
 
     def volume
