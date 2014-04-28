@@ -1,6 +1,24 @@
 module Marantz
   extend self
   VOLUME_THRESHOLD = 80.0
+  COMMANDS = {
+    volume: 'PutMasterVolumeSet/-%s',
+    source: 'PutZone_InputFunction/%s',
+    power: 'PutZone_OnOff/%s',
+    mute: 'PutVolumeMute/%s'
+  }
+  PATHS = {
+    main_zone: '/MainZone/index.put.asp',
+    status: '/goform/formMainZone_MainZoneXml.xml'
+  }
+  SOURCES = {
+    satellite: 'SAT/CBL',
+    iradio: 'IRADIO',
+    spotify: 'SPOTIFY'
+  }
+  SUPPORTED_MODELS = {
+    9 => 'SR5008'
+  }
 
   def configure(&block)
     yield @config ||= Configuration.new
@@ -11,11 +29,11 @@ module Marantz
   end
 
   class Configuration
-    attr_accessor :endpoint, :max_volume
+    attr_accessor :host, :max_volume
   end
 
   configure do |config|
-    config.endpoint = 'http://127.0.0.1'
+    config.host = '127.0.0.1'
     config.max_volume = 50.0
   end
 end

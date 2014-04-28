@@ -4,23 +4,29 @@ require 'xml'
 module Marantz
   class Client
     def initialize
-      @config = YAML.load_file(File.join(File.dirname(__FILE__), '../../config/config.yml'))
-      unless @config['supported_models'].values.include?(status[:model])
-        raise UnsupportedModel
-      end
+      raise UnsupportedModel unless SUPPORTED_MODELS.values.include?(status[:model])
     end
 
-    def switch_to(source)
-      real_source = @config['sources'][source] or raise UnknownSource
+    def source=(name)
+      real_source = SOURCES[name] or raise UnknownSource
       cmds = ["PutZone_InputFunction/#{real_source}"]
-      path = @config['paths']['main_zone']
+      path = PATHS[:main_zone]
       request(path, cmds)
     end
 
-    def set_volume_to(db)
-      raise VolumeTooHigh if db.to_f > Marantz.config.max_volume
-      path = @config['paths']['main_zone']
-      request(path, @config['commands']['volume'] % db_to_volume(db))
+    def source
+      status[:source]
+    end
+
+    def volume=(db)
+      @volume = db.to_f
+      raise VolumeTooHigh if @volume > Marantz.config.max_volume
+      path = PATHS[:main_zone]
+      request(path, COMMANDS[:volume] % db_to_volume(@volume))
+    end
+
+    def volume
+      status[:volume]
     end
 
     def mute
@@ -40,29 +46,27 @@ module Marantz
     end
 
     def status
-      uri = URI(Marantz.config.endpoint + @config['paths']['status'])
+      uri = URI('http://' + Marantz.config.host + PATHS[:status])
       uri.query = URI.encode_www_form({ _: Time.now.to_i * 1_000 })
       response = Net::HTTP.get(uri)
       parser = XML::Parser.string(response, encoding: XML::Encoding::UTF_8)
       doc = parser.parse
       {
         power: doc.find('//Power').first.content,
-        source: @config['sources'].key(doc.find('//NetFuncSelect').first.content) || :unknown,
+        source: SOURCES.key(doc.find('//NetFuncSelect').first.content) || :unknown,
         volume: volume_to_db(doc.find('//MasterVolume').first.content),
-        model: @config['supported_models'][doc.find('//ModelId').first.content.to_i]
+        model: SUPPORTED_MODELS[doc.find('//ModelId').first.content.to_i]
       }
     end
 
   private
 
     def toggle_mute(action)
-      path = @config['paths']['main_zone']
-      request(path, @config['commands']['mute'] % action.downcase)
+      request(PATHS[:main_zone], COMMANDS[:mute] % action.downcase)
     end
 
     def toggle_power(action)
-      path = @config['paths']['main_zone']
-      request(path, @config['commands']['power'] % action.upcase)
+      request(PATHS[:main_zone], COMMANDS[:power] % action.upcase)
     end
 
     def db_to_volume(db)
@@ -76,9 +80,9 @@ module Marantz
     def request(path, commands)
       commands = ([commands].flatten << 'aspMainZone_WebUpdateStatus')
       params = {}.tap do |hash|
-        commands.map.with_index { |c, i| hash["cmd#{i}"] = c }
+        commands.each.with_index { |c, i| hash["cmd#{i}"] = c }
       end
-      uri = URI(Marantz.config.endpoint + path)
+      uri = URI('http://' + Marantz.config.host + path)
       result = Net::HTTP.post_form(uri, params)
     end
   end
