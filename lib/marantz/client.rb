@@ -2,12 +2,10 @@ require 'yaml'
 require 'xml'
 
 module Marantz
-  VOLUME_THRESHOLD = 80.0
-
   class Client
     def initialize
       @config = YAML.load_file(File.join(File.dirname(__FILE__), '../../config/config.yml'))
-      unless @config['supported_models'].include?(status[:model].to_i)
+      unless @config['supported_models'].values.include?(status[:model])
         raise UnsupportedModel
       end
     end
@@ -42,7 +40,8 @@ module Marantz
     end
 
     def status
-      uri = URI(Marantz.config.endpoint + @config['paths']['status'] + "?_=#{Time.now.to_i * 1_000}")
+      uri = URI(Marantz.config.endpoint + @config['paths']['status'])
+      uri.query = URI.encode_www_form({ _: Time.now.to_i * 1_000 })
       response = Net::HTTP.get(uri)
       parser = XML::Parser.string(response, encoding: XML::Encoding::UTF_8)
       doc = parser.parse
@@ -50,7 +49,7 @@ module Marantz
         power: doc.find('//Power').first.content,
         source: @config['sources'].key(doc.find('//NetFuncSelect').first.content) || :unknown,
         volume: volume_to_db(doc.find('//MasterVolume').first.content),
-        model: doc.find('//ModelId').first.content
+        model: @config['supported_models'][doc.find('//ModelId').first.content.to_i]
       }
     end
 

@@ -11,4 +11,4 @@ commands:
   power: PutZone_OnOff/%s
   mute: PutVolumeMute/%s
 supported_models:
-  - 9 # SR5008
+  9: SR5008

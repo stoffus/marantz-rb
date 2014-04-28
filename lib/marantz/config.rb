@@ -1,5 +1,6 @@
 module Marantz
   extend self
+  VOLUME_THRESHOLD = 80.0
 
   def configure(&block)
     yield @config ||= Configuration.new
