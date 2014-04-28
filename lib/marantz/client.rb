@@ -8,10 +8,8 @@ module Marantz
     end
 
     def source=(name)
-      real_source = SOURCES[name] or raise UnknownSource
-      cmds = ["PutZone_InputFunction/#{real_source}"]
-      path = PATHS[:main_zone]
-      request(path, cmds)
+      perform(PATHS[:main_zone], COMMANDS[:source] % (SOURCES[name] or raise UnknownSource))
+      source
     end
 
     def source
@@ -19,10 +17,11 @@ module Marantz
     end
 
     def volume=(db)
-      @volume = db.to_f
-      raise VolumeTooHigh if @volume > Marantz.config.max_volume
+      db = db.to_f
+      raise VolumeTooHigh if db > Marantz.config.max_volume
       path = PATHS[:main_zone]
-      request(path, COMMANDS[:volume] % db_to_volume(@volume))
+      perform(path, COMMANDS[:volume] % db_to_volume(db))
+      volume
     end
 
     def volume
@@ -45,6 +44,24 @@ module Marantz
       toggle_power(:off)
     end
 
+  private
+
+    def toggle_mute(action)
+      perform(PATHS[:main_zone], COMMANDS[:mute] % action)
+    end
+
+    def toggle_power(action)
+      perform(PATHS[:main_zone], COMMANDS[:power] % action)
+    end
+
+    def db_to_volume(db)
+      (VOLUME_THRESHOLD - db.to_f)
+    end
+
+    def volume_to_db(volume)
+      (VOLUME_THRESHOLD + volume.to_f)
+    end
+
     def status
       uri = URI('http://' + Marantz.config.host + PATHS[:status])
       uri.query = URI.encode_www_form({ _: Time.now.to_i * 1_000 })
@@ -59,25 +76,7 @@ module Marantz
       }
     end
 
-  private
-
-    def toggle_mute(action)
-      request(PATHS[:main_zone], COMMANDS[:mute] % action.downcase)
-    end
-
-    def toggle_power(action)
-      request(PATHS[:main_zone], COMMANDS[:power] % action.upcase)
-    end
-
-    def db_to_volume(db)
-      (VOLUME_THRESHOLD - db.to_f)
-    end
-
-    def volume_to_db(volume)
-      (VOLUME_THRESHOLD + volume.to_f)
-    end
-
-    def request(path, commands)
+    def perform(path, commands)
       commands = ([commands].flatten << 'aspMainZone_WebUpdateStatus')
       params = {}.tap do |hash|
         commands.each.with_index { |c, i| hash["cmd#{i}"] = c }
