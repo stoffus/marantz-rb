@@ -26,7 +26,7 @@ You need to configure the gem to fit your needs:
   # Default values
   Marantz.configure do |config|
     config.host = '127.0.0.1'
-    config.max_volume = 50
+    config.max_volume = 50.0
   end
 
 === Initiating client
@@ -34,19 +34,39 @@ You need to configure the gem to fit your needs:
   avr = Marantz::Client.new
 
 === Power on/off
+
+  # Power on
   avr.on
+
+  # Power off
   avr.off
 
 === Change source
 
-Currently the following sources are switchable: SAT/CBL, Internet Radio, Spotify
+Currently the following sources are switchable: SAT/CBL, Internet Radio, Spotify.
 
-  avr.source = :satellite
+  # Change to Internet Radio
   avr.source = :iradio
+
+  # Change to SAT/CBL
+  avr.source = :satellite
+
+  # Getting current source
+  avr.source
+  => :satellite
+
+NOTE: If the receiver is in standby mode it will be turned on.
 
 === Volume
 
-  avr.volume = 35 # dB
+  # Setting volume (dB)
+  avr.volume = 35.0
+
+  # Getting current volume
+  avr.volume
+  => 35.0
+
+  # Muting
   avr.mute
   avr.unmute
 
