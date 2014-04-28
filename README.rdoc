@@ -70,7 +70,7 @@ NOTE: If the receiver is in standby mode it will be turned on.
   avr.mute
   avr.unmute
 
-== Build Status {<img src="https://secure.travis-ci.org/stoffus/marantz-rb.png"/>}[http://travis-ci.org/stoffus/marantz-rb]
+== Build Status {<img src="https://secure.travis-ci.org/stoffus/marantz-rb.svg"/>}[http://travis-ci.org/stoffus/marantz-rb]
 
 
 == Questions, Feedback
