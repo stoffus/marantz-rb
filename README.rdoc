@@ -1,0 +1,63 @@
+= Marantz
+
+Ruby client that uses Marantz web interface as an API.
+
+
+== Supported versions
+
+* Ruby 1.9.3, 2.0.0, 2.1.1
+
+
+== Install
+
+Put this line in your Gemfile:
+  gem 'marantz'
+
+Then bundle:
+  $ bundle
+
+
+== Usage
+
+=== General configuration options
+
+You need to configure the gem to fit your needs:
+
+  # Default values
+  Marantz.configure do |config|
+    config.endpoint = 'http://127.0.0.1'
+    config.max_volume = 50
+  end
+
+=== Initiating client
+
+  avr = Marantz::Client.new
+
+=== Power on/off
+  avr.on
+  avr.off
+
+=== Change source
+
+Currently the following sources are switchable: SAT/CBL, Internet Radio, Spotify
+
+  avr.switch_to(:satellite)
+  avr.switch_to(:iradio)
+
+=== Volume
+
+  avr.set_volume_to(35) # dB
+  avr.mute
+  avr.unmute
+
+== Build Status {<img src="https://secure.travis-ci.org/stoffus/marantz-rb.png"/>}[http://travis-ci.org/stoffus/marantz-rb]
+
+
+== Questions, Feedback
+
+Feel free to message me on Github (stoffus).
+
+
+== Copyright
+
+Copyright (c) 2014 Christopher Svensson.

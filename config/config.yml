@@ -1,0 +1,14 @@
+paths:
+  main_zone: /MainZone/index.put.asp
+  status: /goform/formMainZone_MainZoneXml.xml
+sources:
+  :satellite: SAT/CBL
+  :iradio: IRADIO
+  :spotify: SPOTIFY
+commands:
+  volume: PutMasterVolumeSet/-%s
+  source: PutZone_InputFunction/%s
+  power: PutZone_OnOff/%s
+  mute: PutVolumeMute/%s
+supported_models:
+  - 9 # SR5008
