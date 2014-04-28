@@ -44,11 +44,11 @@ module Marantz
   private
 
     def toggle_mute(action)
-      perform(PATHS[:main_zone], COMMANDS[:mute] % action)
+      perform(PATHS[:main_zone], COMMANDS[:mute] % action.downcase)
     end
 
     def toggle_power(action)
-      perform(PATHS[:main_zone], COMMANDS[:power] % action)
+      perform(PATHS[:main_zone], COMMANDS[:power] % action.upcase)
     end
 
     def db_to_volume(db)
