@@ -14,9 +14,18 @@ module Marantz
   SOURCES = {
     satellite: 'SAT/CBL',
     iradio: 'IRADIO',
+    hdradio: 'HDRADIO',
+    internet: 'NET/USB',
+    cd: 'CD',
+    tv: 'TV',
+    dvd: 'DVD',
+    aux: 'AUX',
+    game: 'GAME',
+    blueray: 'BD',
     spotify: 'SPOTIFY'
   }
   SUPPORTED_MODELS = {
+    1 => 'SR7005',
     9 => 'SR5008'
   }
 
