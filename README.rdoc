@@ -11,6 +11,9 @@ Ruby client that uses Marantz web interface as an API.
 == Install
 
 Put this line in your Gemfile:
+  source 'https://rubygems.org'
+
+  gem 'libxml-ruby'
   gem 'marantz'
 
 Then bundle:
