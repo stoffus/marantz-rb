@@ -5,7 +5,7 @@ Ruby client that uses Marantz web interface as an API.
 
 == Supported versions
 
-* Ruby 1.9.3, 2.0.0, 2.1.1
+* Ruby 1.9.3, 2.0.0, 2.1.5
 
 
 == Install
@@ -73,12 +73,9 @@ NOTE: If the receiver is in standby mode it will be turned on.
   avr.mute
   avr.unmute
 
-== Build Status {<img src="https://secure.travis-ci.org/stoffus/marantz-rb.svg"/>}[http://travis-ci.org/stoffus/marantz-rb]
-
-
 == Questions, Feedback
 
-Feel free to message me on Github (stoffus).
+Feel free to message me on Github (mikefranken).
 
 
 == Copyright
