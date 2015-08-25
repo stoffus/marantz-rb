@@ -18,6 +18,7 @@ module Marantz
     internet: 'NET/USB',
     cd: 'CD',
     tv: 'TV',
+    sat: 'SAT',
     dvd: 'DVD',
     aux: 'AUX',
     game: 'GAME',
