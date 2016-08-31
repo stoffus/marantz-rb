@@ -23,10 +23,12 @@ module Marantz
     aux: 'AUX',
     game: 'GAME',
     blueray: 'BD',
-    spotify: 'SPOTIFY'
+    spotify: 'SPOTIFY',
+    mpd: 'MPLAY'
   }
   SUPPORTED_MODELS = {
     1 => 'SR7005',
+    7 => 'NR1506',
     9 => 'SR5008'
   }
 
