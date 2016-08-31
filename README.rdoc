@@ -5,7 +5,7 @@ Ruby client that uses Marantz web interface as an API.
 
 == Supported versions
 
-* Ruby 1.9.3, 2.0.0, 2.1.5
+* Ruby 1.9.3, 2.0.0, 2.1.5, 2.2.0, 2.3.0
 
 
 == Install
@@ -38,20 +38,26 @@ You need to configure the gem to fit your needs:
 
 === Power on/off
 
-  # Power on
-  avr.on
+  if avr.power != "ON"
+    avr.on
+  else
+    puts "Already on"
+  end
 
   # Power off
   avr.off
 
 === Change source
 
-Currently the following sources are switchable: SAT/CBL, Internet Radio, Spotify.
+Currently the following sources are switchable: SAT/CBL, Internet Radio, Presets, Spotify.
 
   # Change to Internet Radio
   avr.source = :iradio
 
-  # Change to SAT/CBL
+   # Change preset
+  avr.preset = 6
+
+ # Change to SAT/CBL
   avr.source = :satellite
 
   # Getting current source
