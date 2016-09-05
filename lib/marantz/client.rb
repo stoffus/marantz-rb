@@ -21,8 +21,19 @@ module Marantz
       perform(path, COMMANDS[:volume] % db_to_volume(db))
     end
 
+    def preset=(ch)
+      # PutNetAudioCommand/PresetCall03
+      channel = "PresetCall0#{ch}"
+      path = PATHS[:main_zone]
+      perform(path, COMMANDS[:preset] % channel)
+    end
+
     def volume
       status[:volume]
+    end
+
+    def power
+      status[:power]
     end
 
     def mute
@@ -65,12 +76,14 @@ module Marantz
       response = Net::HTTP.get(uri)
       parser = XML::Parser.string(response, encoding: XML::Encoding::UTF_8)
       doc = parser.parse
-      {
+      result =     {
         power: doc.find('//Power').first.content,
-        source: SOURCES.key(doc.find('//NetFuncSelect').first.content) || :unknown,
+        #source: SOURCES.key(doc.find('//NetFuncSelect').first.content) || :unknown,
+        source: SOURCES.key(doc.find('//InputFuncSelectMain').first.content) || :unknown,
         volume: volume_to_db(doc.find('//MasterVolume').first.content),
         model: SUPPORTED_MODELS[doc.find('//ModelId').first.content.to_i]
       }
+      result
     end
 
     def perform(path, commands)
@@ -80,6 +93,7 @@ module Marantz
       end
       uri = URI('http://' + Marantz.config.host + path)
       result = Net::HTTP.post_form(uri, params)
+      result
     end
   end
 end
