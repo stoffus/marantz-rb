@@ -81,7 +81,7 @@ NOTE: If the receiver is in standby mode it will be turned on.
 
 == Questions, Feedback
 
-Feel free to message me on Github (mikefranken).
+Feel free to message me on GitHub (stoffus).
 
 
 == Copyright
