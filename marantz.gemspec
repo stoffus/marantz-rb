@@ -12,8 +12,8 @@ Gem::Specification.new do |s|
   s.description = 'Ruby client that uses Marantz web interface as an API.'
   s.license     = 'MIT'
 
-  s.required_ruby_version = '>= 1.9.3'
-  s.required_rubygems_version = '>= 1.8.11'
+  s.required_ruby_version = '>= 2.5.0'
+  s.required_rubygems_version = '>= 2.7.3'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

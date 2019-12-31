@@ -5,7 +5,7 @@ Ruby client that uses Marantz web interface as an API.
 
 == Supported versions
 
-* Ruby 1.9.3, 2.0.0, 2.1.5, 2.2.0, 2.3.0
+* Ruby 2.5, 2.6, 2.7
 
 
 == Install
@@ -86,4 +86,4 @@ Feel free to message me on GitHub (stoffus).
 
 == Copyright
 
-Copyright (c) 2014 Christopher Svensson.
+Copyright (c) 2020 Christopher Svensson.
